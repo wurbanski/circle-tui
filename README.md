@@ -12,6 +12,11 @@ about you, such as your token.
 **NOTE:** You can add additional field to specify your default project, e.g.
 `project: github/wurbanski/circle-tui`.
 
+## Run with docker
+
+If you don't want to give a lot of thought into running this, use docker!
+`docker run -it -v ~/.circleci/cli.yml:/app/cli.yml wurbanski/circle-tui:latest --config /app/cli.yml`
+
 ```
 usage: main.py [-h] [--config CONFIG] [--project PROJECT]
                [--build_num BUILD_NUM] [--step STEP] [--non_interactive]
