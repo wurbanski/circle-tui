@@ -23,7 +23,9 @@ class CircleTui():
                             '<vcs>/<username>/<reponame>')
         parser.add_argument('--build_num', default='', help='Build number')
         parser.add_argument('--step', default='', help='Steps')
-        parser.add_argument('--non_interactive', action='store_true')
+        parser.add_argument('--non_interactive', action='store_true',
+                            help='Use non-interactive mode - just print the '
+                            'logs, requires all other parameters')
         args = parser.parse_args()
         self.__args = args
 
