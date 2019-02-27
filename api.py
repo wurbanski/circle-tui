@@ -68,12 +68,14 @@ class CircleApi():
 
     def __get(self, route, data=None, json=True, no_cache=False):
         url = "{}/{}".format(self.__url, route)
-        print('DEBUG:', url)
+        headers = {'Accept': 'application/json'}
         if no_cache:
             with requests_cache.disabled():
-                r = requests.get(url, auth=(self.__token, ''), params=data)
+                r = requests.get(url, auth=(self.__token, ''), params=data,
+                                 headers=headers)
         else:
-            r = requests.get(url, auth=(self.__token, ''), params=data)
+            r = requests.get(url, auth=(self.__token, ''), params=data,
+                             headers=headers)
         if r.status_code != 200:
             raise CircleApiError(error=r.status_code)
         if json:

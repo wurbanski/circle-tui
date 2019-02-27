@@ -1,0 +1,4 @@
+requests
+requests_cache
+PyYAML
+prompt_toolkit
