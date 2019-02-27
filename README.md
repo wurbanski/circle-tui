@@ -1,11 +1,16 @@
 # CircleTUI
 
-* Get your things square with CircleCI! *
+_Get your things square with CircleCI!_
 
 ---
 
 This is a small tool which allows you to browse build logs from CircleCI from
 your terminal.
+It uses your CircleCI CLI config (`~/.circleci/cli.yml`) to get information
+about you, such as your token.
+
+**NOTE:** You can add additional field to specify your default project, e.g.
+`project: github/wurbanski/circle-tui`.
 
 ```
 usage: main.py [-h] [--config CONFIG] [--project PROJECT]
