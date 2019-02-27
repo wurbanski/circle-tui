@@ -2,7 +2,7 @@
 
 _Get your things square with CircleCI!_
 
----
+## Description
 
 This is a small tool which allows you to browse build logs from CircleCI from
 your terminal.
@@ -16,6 +16,8 @@ about you, such as your token.
 
 If you don't want to give a lot of thought into running this, use docker!
 `docker run -it -v ~/.circleci/cli.yml:/app/cli.yml wurbanski/circle-tui:latest --config /app/cli.yml`
+
+## Usage
 
 ```
 usage: main.py [-h] [--config CONFIG] [--project PROJECT]
