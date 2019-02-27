@@ -9,6 +9,9 @@ your terminal.
 It uses your CircleCI CLI config (`~/.circleci/cli.yml`) to get information
 about you, such as your token.
 
+Yes, it's expected that you have a [working CircleCI CLI configured](https://circleci.com/docs/2.0/local-cli/). Sorry! But you should have anyway
+:).
+
 **NOTE:** You can add additional field to specify your default project, e.g.
 `project: github/wurbanski/circle-tui`.
 
