@@ -1,0 +1,30 @@
+version: '2.1'
+
+jobs:
+  build:
+    docker:
+      - image: circleci/python
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build container
+          command: |
+            export IMAGE=${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
+            docker build -t ${IMAGE}:${CIRCLE_SHA1} .
+      - run:
+          name: Test container
+          command: |
+              export IMAGE=${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
+              docker run -it ${IMAGE}:${CIRCLE_SHA1} --help
+
+
+workflows:
+  version: '2.1'
+  check:
+    jobs:
+      - build:
+          filters:
+            branches:
+              ignore:
+                - master

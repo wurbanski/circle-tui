@@ -1,6 +1,6 @@
 # CircleTUI
 
-_Get your things square with CircleCI!_
+_Get your things square with CircleCI!_ [![CircleCI](https://circleci.com/gh/wurbanski/circle-tui.svg?style=svg)](https://circleci.com/gh/wurbanski/circle-tui)
 
 ## Description
 
