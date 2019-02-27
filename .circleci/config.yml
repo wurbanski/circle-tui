@@ -23,8 +23,4 @@ workflows:
   version: '2.1'
   check:
     jobs:
-      - build:
-          filters:
-            branches:
-              ignore:
-                - master
+      - build
