@@ -20,6 +20,15 @@ Yes, it's expected that you have a [working CircleCI CLI configured](https://cir
 If you don't want to give a lot of thought into running this, use docker!
 `docker run -it -v ~/.circleci/cli.yml:/app/cli.yml wurbanski/circle-tui:latest --config /app/cli.yml`
 
+## Installation
+
+circle-tui requires python 3 and was tested on python 3.6 and 3.7.
+
+Steps:
+1. Create virtualenv with python 3 using your preferred method, e.g. `mkvirtualenv -p $(which python 3) circle-tui`
+2. Activate virtualenv and install requried packages: `pip install -r requirements.txt`
+3. Run app: `python main.py`
+
 ## Usage
 
 ```
