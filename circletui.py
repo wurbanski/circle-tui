@@ -2,9 +2,16 @@ import argparse
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter, Completer, Completion
 from prompt_toolkit.formatted_text import ANSI
+from prompt_toolkit.validation import Validator
 
 from api import CircleApi
 from config import CircleTuiConfig
+
+def is_empty(text):
+    return bool(text)
+
+empty_validator = Validator.from_callable(is_empty,
+                                          error_message="Input can't be empty")
 
 class CircleTuiState():
     build_num = ''
@@ -43,7 +50,8 @@ class CircleTui():
         WordCompleter(['{}/{}'.format(proj['vcs_type'], proj['id']) for proj in projects])
 
         project = prompt("Which project? ", completer=projects_completer,
-                        default=self.state.project)
+                         validator=empty_validator,
+                         default=self.state.project)
         self.state.project = project
         return project
 
@@ -66,6 +74,7 @@ class CircleTui():
         build_num = prompt("Select build: ", completer=BuildCompleter(),
                            default=self.state.build_num,
                            complete_in_thread=True,
+                           validator=empty_validator,
                            bottom_toolbar=message)
         self.state.build_num = build_num
         return build_num
@@ -88,6 +97,7 @@ class CircleTui():
                                                      self.state.step))
         step = prompt("Select step: ", completer=StepsCompleter(),
                       default=self.state.step,
+                      validator=empty_validator,
                       bottom_toolbar=message)
         self.state.step = step
         if 'all' in step:

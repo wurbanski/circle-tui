@@ -22,7 +22,7 @@ If you don't want to give a lot of thought into running this, use docker!
 
 ## Installation
 
-circle-tui requires python 3 and was tested on python 3.6 and 3.7.
+circle-tui requires python 3 and was tested on python 3.6 and 3.7. You might require development tools and python 3 development headers on your machine.
 
 Steps:
 1. Create virtualenv with python 3 using your preferred method, e.g. `mkvirtualenv -p $(which python 3) circle-tui`
