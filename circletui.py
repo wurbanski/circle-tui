@@ -33,7 +33,7 @@ class CircleTui():
         self.api = CircleApi(token=self.config.token, project=self.config.project,
                              circle_host=self.config.host)
         self.state = CircleTuiState()
-        self.state.project = self.api.project
+        self.state.project = self.api.project or ''
         self.state.build_num = args.build_num
         self.state.step = args.step
 

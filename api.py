@@ -57,7 +57,10 @@ class CircleApi():
 
     @property
     def project(self):
-        return "{}/{}/{}".format(self.__vcs_type, self.__username, self.__reponame)
+        if self.__vcs_type and self.__username and self.__reponame:
+            return "{}/{}/{}".format(self.__vcs_type, self.__username, self.__reponame)
+        else:
+            return None
 
     @project.setter
     def project(self, project):
