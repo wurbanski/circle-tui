@@ -16,6 +16,7 @@ empty_validator = Validator.from_callable(is_empty,
 class CircleTuiState():
     build_num = ''
     project = ''
+    branch = ''
     step = ''
 
 
@@ -29,6 +30,7 @@ class CircleTui():
         parser.add_argument('--project', help='Project name in format: '
                             '<vcs>/<username>/<reponame>')
         parser.add_argument('--build_num', default='', help='Build number')
+        parser.add_argument('--branch', default='', help='Branch name')
         parser.add_argument('--step', default='', help='Steps')
         parser.add_argument('--non_interactive', action='store_true',
                             help='Use non-interactive mode - just print the '
@@ -43,6 +45,7 @@ class CircleTui():
         self.state.project = self.api.project or ''
         self.state.build_num = args.build_num
         self.state.step = args.step
+        self.state.branch = args.branch
 
     def select_project(self):
         projects = self.api.my_projects()
@@ -55,9 +58,20 @@ class CircleTui():
         self.state.project = project
         return project
 
+    def select_branch(self):
+        branch = None
+        branch_input = prompt("Which branch? (empty for all branches) ",
+                               default=self.state.branch).strip()
+        if branch_input:
+            branch = branch_input
+        self.state.branch = branch_input
+        return branch
+
     def select_build(self):
         limit = 50
-        builds = self.api.get_builds_for_project(self.state.project, limit=limit)
+        builds = self.api.get_builds_for_project(self.state.project,
+                                                 limit=limit,
+                                                 branch=self.state.branch)
         class BuildCompleter(Completer):
             def get_completions(self, document, complete_event):
                 for build in builds:
@@ -138,6 +152,7 @@ class CircleTui():
             try:
                 print("\nPress ^C to quit at any time, <Tab> for completions.")
                 project = self.select_project()
+                branch = self.select_branch()
                 build_num = self.select_build()
                 step, index = self.select_step()
                 self.show_step_logs(step, index)

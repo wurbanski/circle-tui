@@ -1,6 +1,7 @@
 import requests
 import requests_cache
 import json
+from urllib.parse import quote_plus as urlencode
 
 requests_cache.install_cache('circleci-cache', expire_after=30)
 
@@ -118,10 +119,13 @@ class CircleApi():
         return set(organizations)
 
     def get_builds_for_project(self, project=None, limit=30,
-                               offset=0, build_filter=None):
+                               offset=0, build_filter=None, branch=None):
         project = project or self.project
         data = {'filter': build_filter, 'limit': limit, 'offset': offset}
-        url = "project/{}".format(project)
+        if branch and branch.strip():
+            url = "project/{}/tree/{}".format(project, urlencode(branch))
+        else:
+            url = "project/{}".format(project)
         builds = self.__get(url, data)
         for build in builds:
             yield Build(build)
