@@ -8,7 +8,7 @@ from api import CircleApi
 from config import CircleTuiConfig
 
 def is_empty(text):
-    return bool(text)
+    return bool(text.strip())
 
 empty_validator = Validator.from_callable(is_empty,
                                           error_message="Input can't be empty")
