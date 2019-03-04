@@ -70,9 +70,10 @@ class CircleApi():
         self.__username = username
         self.__reponame = reponame
 
-    def __get(self, route, data=None, json=True, no_cache=False):
+    def __get(self, route, data={}, json=True, no_cache=False):
         url = "{}/{}".format(self.__url, route)
         headers = {'Accept': 'application/json'}
+        data['shallow'] = 'true'
         if no_cache:
             with requests_cache.disabled():
                 r = requests.get(url, auth=(self.__token, ''), params=data,
