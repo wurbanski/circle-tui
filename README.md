@@ -1,6 +1,8 @@
 # CircleTUI
 
-_Get your things square with CircleCI!_ [![CircleCI](https://circleci.com/gh/wurbanski/circle-tui.svg?style=svg)](https://circleci.com/gh/wurbanski/circle-tui)
+_Get your things square with CircleCI!_
+
+[![CircleCI](https://circleci.com/gh/wurbanski/circle-tui.svg?style=svg)](https://circleci.com/gh/wurbanski/circle-tui)
 
 ## Description
 
@@ -27,12 +29,12 @@ circle-tui requires python 3 and was tested on python 3.6 and 3.7. You might req
 Steps:
 1. Create virtualenv with python 3 using your preferred method, e.g. `mkvirtualenv -p $(which python 3) circle-tui`
 2. Activate virtualenv and install requried packages: `pip install -r requirements.txt`
-3. Run app: `python main.py`
+3. Run app: `python circle-tui.py`
 
 ## Usage
 
 ```
-usage: main.py [-h] [--config CONFIG] [--project PROJECT]
+usage: circle-tui.py [-h] [--config CONFIG] [--project PROJECT]
                [--build_num BUILD_NUM] [--step STEP] [--non_interactive]
 
 TUI/Log viewer for CircleCI

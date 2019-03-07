@@ -1,5 +1,5 @@
 import json
-from circletui import CircleTui
+from circle_tui.circletui import CircleTui
 
 if __name__ == '__main__':
     CircleTui().main()

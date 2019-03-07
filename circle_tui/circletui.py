@@ -1,11 +1,12 @@
 import argparse
+import json
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter, Completer, Completion
 from prompt_toolkit.formatted_text import ANSI
 from prompt_toolkit.validation import Validator
 
-from api import CircleApi
-from config import CircleTuiConfig
+from circle_tui.api import CircleApi
+from circle_tui.config import CircleTuiConfig
 
 def is_empty(text):
     return bool(text.strip())

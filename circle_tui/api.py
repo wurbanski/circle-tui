@@ -3,8 +3,6 @@ import requests_cache
 import json
 from urllib.parse import quote_plus as urlencode
 
-requests_cache.install_cache('circleci-cache', expire_after=30)
-
 class CircleApiError(Exception):
     def __init__(self, error):
         self.error = error
@@ -43,53 +41,57 @@ class Build():
 class CircleApi():
     def __init__(self, token=None, circle_host='https://circleci.com',
                  api_version='v1.1', username=None, reponame=None,
-                vcs_type=None, project=None):
-        self.__url = "{}/api/{}".format(circle_host, api_version)
-        self.__token = token
+                vcs_type=None, project=None, never_cache=False):
+        self._url = "{}/api/{}".format(circle_host, api_version)
+        self._token = token
+
         if project:
             vcs_type, username, reponame = project.split('/')
-            self.__vcs_type = vcs_type
-            self.__username = username
-            self.__reponame = reponame
+            self._vcs_type = vcs_type
+            self._username = username
+            self._reponame = reponame
         else:
-            self.__vcs_type = vcs_type
-            self.__username = username
-            self.__reponame = reponame
+            self._vcs_type = vcs_type
+            self._username = username
+            self._reponame = reponame
+        
+        if not never_cache:
+            requests_cache.install_cache('circleci-cache', expire_after=30)
 
     @property
     def project(self):
-        if self.__vcs_type and self.__username and self.__reponame:
-            return "{}/{}/{}".format(self.__vcs_type, self.__username, self.__reponame)
+        if self._vcs_type and self._username and self._reponame:
+            return "{}/{}/{}".format(self._vcs_type, self._username, self._reponame)
         else:
             return None
 
     @project.setter
     def project(self, project):
         vcs_type, username, reponame = project.split('/')
-        self.__vcs_type = vcs_type
-        self.__username = username
-        self.__reponame = reponame
+        self._vcs_type = vcs_type
+        self._username = username
+        self._reponame = reponame
 
-    def __get(self, route, data={}, json=True, no_cache=False):
-        url = "{}/{}".format(self.__url, route)
+    def _get(self, route, data={}, json=True, no_cache=False):
+        url = "{}/{}".format(self._url, route)
         headers = {'Accept': 'application/json'}
         data['shallow'] = 'true'
         if no_cache:
             with requests_cache.disabled():
-                r = requests.get(url, auth=(self.__token, ''), params=data,
+                r = requests.get(url, auth=(str(self._token), ''), params=data,
                                  headers=headers)
         else:
-            r = requests.get(url, auth=(self.__token, ''), params=data,
+            r = requests.get(url, auth=(str(self._token), ''), params=data,
                              headers=headers)
         if r.status_code != 200:
             raise CircleApiError(error=r.status_code)
         if json:
-            return self.__sanitize(r.json())
+            return self._sanitize(r.json())
         else:
             return r.text
 
     @staticmethod
-    def __sanitize(response):
+    def _sanitize(response):
         try:
             del response['circle_yml']
         except:
@@ -97,10 +99,10 @@ class CircleApi():
         return response
 
     def get_me(self):
-        return self.__get('me')
+        return self._get('me')
 
     def get_projects(self):
-        return self.__get('projects')
+        return self._get('projects')
 
     def my_projects(self):
         projects = []
@@ -127,7 +129,7 @@ class CircleApi():
             url = "project/{}/tree/{}".format(project, urlencode(branch))
         else:
             url = "project/{}".format(project)
-        builds = self.__get(url, data)
+        builds = self._get(url, data)
         for build in builds:
             yield Build(build)
 
@@ -136,13 +138,13 @@ class CircleApi():
         url = 'project/{}/{}/output/{}/{}'.format(project, build_num, step_id,
                                                   index)
         data = {'file': 'true'}
-        logs = self.__get(url, data, json=False, no_cache=True)
+        logs = self._get(url, data, json=False, no_cache=True)
         return logs
 
     def get_build_details(self, build_num, project=None):
         project = project or self.project
         url = 'project/{}/{}'.format(project, build_num)
-        return Build(self.__get(url, no_cache=True))
+        return Build(self._get(url, no_cache=True))
     
     def get_steps_for_build(self, build_num, project=None, step_id=None,
                             index=0):
