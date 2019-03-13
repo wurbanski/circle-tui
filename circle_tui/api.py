@@ -27,14 +27,22 @@ class Build():
         self.build_url = json['build_url']
         self.status = json['status']
         self.outcome = json['outcome']
-        self.job_name = json['workflows']['job_name']
-        self.workflow_name = json['workflows']['workflow_name']
-        self.workflow_id = json['workflows']['workflow_id']
         self.branch = json['branch']
+        if 'workflows' in json:
+            self.job_name = json['workflows']['job_name']
+            self.workflow_name = json['workflows']['workflow_name']
+            self.workflow_id = json['workflows']['workflow_id']
+        else:
+            self.job_name = json.get('job_name', '')
+            self.workflow_name = ''
+            self.workflow_id = ''
+
+
 
     def __repr__(self):
-        return "{} {} in {} {}".format(self.job_name,
+        return "{} {} {} in {} {}".format(self.job_name,
                                        self.build_num,
+                                       self.status,
                                        self.workflow_name,
                                        self.workflow_id)
 
@@ -42,6 +50,7 @@ class CircleApi():
     def __init__(self, token=None, circle_host='https://circleci.com',
                  api_version='v1.1', username=None, reponame=None,
                 vcs_type=None, project=None, never_cache=False):
+        self._circle_host = circle_host
         self._url = "{}/api/{}".format(circle_host, api_version)
         self._token = token
 
@@ -97,6 +106,9 @@ class CircleApi():
         except:
             pass
         return response
+
+    def _workflow_url(self, workflow_id):
+        return "{}/workflow-run/{}".format(self._circle_host, workflow_id)
 
     def get_me(self):
         return self._get('me')
